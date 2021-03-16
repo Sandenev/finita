@@ -1,0 +1,22 @@
+- name: Run app in docker
+  hosts: gcp
+  remote_user: root
+  become: yes
+  tasks:
+    - name: update repository
+      apt:
+       update_cache: yes
+    - name: Ensure docker install
+      apt:
+       name: docker.io
+       state: present
+    - name: Ensure python3-pip is install
+      apt:
+       name: python3-pip
+       state: present
+    - name: downloading repo
+      command: "docker pull drobovictor/fin1"
+      become: yes
+    - name: start repo
+      command: "docker run --rm --name prod-webapp-deployed -d -p 8888:8080 drobovictor/fin1"
+      become: yes
